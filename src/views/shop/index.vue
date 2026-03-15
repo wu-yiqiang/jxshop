@@ -1,4 +1,9 @@
 <template>
+  <div class="topbar">
+          <div class="back-btn" @click="$router.back()">
+        <van-icon name="arrow-left" color="#fff" size="20" />
+      </div>
+  </div>
   <div class="takeout-page">
       <div class="shop-header" :style="{ backgroundImage: `url(${shopInfo.banner})` }">
       <div class="header-overlay"></div>
@@ -16,10 +21,6 @@
           <span class="notice-text">{{ shopInfo.notice }}</span>
           <van-icon name="arrow" />
         </div> -->
-      </div>
-      <!-- 返回按钮 -->
-      <div class="back-btn" @click="$router.back()">
-        <van-icon name="arrow-left" color="#fff" size="20" />
       </div>
     </div>
 
@@ -356,6 +357,9 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.topbar {
+  padding: 10px 12px;
+}
 .takeout-page {
   height: 100vh;
   display: flex;
