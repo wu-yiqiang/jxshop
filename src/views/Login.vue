@@ -12,44 +12,32 @@
           <label class="input-label">手机号码</label>
           <div class="input-wrapper">
             <span class="prefix-icon">📱</span>
-            <input 
-              type="tel" 
-              v-model="form.phone" 
-              placeholder="请输入手机号" 
-              maxlength="11"
-              class="custom-input"
-              :class="{ error: errors.phone }"
-              @blur="validatePhone"
-            />
+            <input type="tel" v-model="form.phone" placeholder="请输入手机号" maxlength="11" class="custom-input"
+              :class="{ error: errors.phone }" @blur="validatePhone" />
           </div>
           <span v-if="errors.phone" class="error-msg">{{ errors.phone }}</span>
         </div>
 
-        <!-- 验证码 / 密码 切换模式 (这里演示验证码登录，电商常用) -->
         <div class="input-group">
           <label class="input-label">密码</label>
           <div class="input-wrapper">
             <span class="prefix-icon">🔒</span>
-            <input 
-              type="text" 
-              v-model="form.code" 
-              placeholder="请输入密码" 
-              minlength="8"
-              maxlength="16"
-              class="custom-input"
-              :class="{ error: errors.code }"
-            />
+            <input type="text" v-model="form.code" placeholder="请输入密码" minlength="8" maxlength="16" class="custom-input"
+              :class="{ error: errors.code }" />
           </div>
           <span v-if="errors.code" class="error-msg">{{ errors.code }}</span>
         </div>
 
-        <!-- 协议勾选 -->
         <div class="agreement-group">
-          <input type="checkbox" id="agree" v-model="form.agree" class="checkbox" />
+          <div class="agree">
+            <input type="checkbox" id="agree" v-model="form.agree" class="checkbox" />
           <label for="agree" class="agreement-text">
             我已阅读并同意 <a href="#">《用户服务协议》</a> 和 <a href="#">《隐私政策》</a>
           </label>
+          </div>
+          <div v-if="!form.agree && errors.agree" class="error-msg">{{ errors.agree }}</div>
         </div>
+                  
         <button type="submit" class="login-btn" :disabled="isLoading">
           <span v-if="isLoading" class="loading-spinner"></span>
           {{ isLoading ? '登录中...' : '立即登录' }}
@@ -118,7 +106,7 @@ const validatePhone = () => {
 
 const validateForm = (): boolean => {
   let isValid = true;
-  
+
   // 验证手机号
   validatePhone();
   if (errors.phone) isValid = false;
@@ -130,7 +118,7 @@ const validateForm = (): boolean => {
   }
   // 验证协议
   if (!form.agree) {
-    errors.agree = '请勾选用户协议';
+    errors.agree = '请勾选用户协议'
     isValid = false;
   }
 
@@ -147,13 +135,13 @@ const handleLogin = async () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     // TODO: 替换为真实的 API 调用
     // const res = await api.login({ phone: form.phone, code: form.code });
-    
+
     console.log('登录成功', { phone: form.phone, code: form.code });
-    
+
     // 登录成功后跳转
-    router.push('/home'); 
+    router.push('/home');
     // 或者保存 token: localStorage.setItem('token', res.token);
-    
+
   } catch (error) {
     console.error('登录失败', error);
     alert('登录失败，请稍后重试');
@@ -164,6 +152,7 @@ const handleLogin = async () => {
 
 // 组件卸载时清理定时器
 import { onBeforeUnmount } from 'vue';
+import { error } from 'console';
 onBeforeUnmount(() => {
   if (timer) clearInterval(timer);
 });
@@ -198,7 +187,8 @@ onBeforeUnmount(() => {
   color: white;
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
-  margin-bottom: -40px; /* 让卡片上浮 */
+  margin-bottom: -40px;
+  /* 让卡片上浮 */
   z-index: 1;
   box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
 }
@@ -304,7 +294,8 @@ onBeforeUnmount(() => {
   cursor: pointer;
   white-space: nowrap;
   border-left: 1px solid #eee;
-  height: 48px; /* 与 input 高度一致 */
+  height: 48px;
+  /* 与 input 高度一致 */
   display: flex;
   align-items: center;
 }
@@ -317,11 +308,14 @@ onBeforeUnmount(() => {
 
 /* --- 协议 --- */
 .agreement-group {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 24px;
+
   font-size: 12px;
   color: #666;
+  margin-bottom: 24px;
+  .agree {
+      display: flex;
+  align-items: flex-start;
+  }
 }
 
 .checkbox {
@@ -376,7 +370,9 @@ onBeforeUnmount(() => {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* --- 底部链接 --- */
