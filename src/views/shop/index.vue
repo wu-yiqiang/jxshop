@@ -25,7 +25,6 @@
 
     <!-- 2. 主体内容：左右双栏联动 -->
     <div class="main-container">
-      <!-- 左侧：分类导航 -->
       <div class="category-sidebar">
         <div 
           v-for="(cat, index) in menuData" 
@@ -34,7 +33,6 @@
           @click="scrollToCategory(cat.id)"
         >
           <div class="item-name">{{ cat.name }}</div>
-          <!-- 分类角标：显示该分类已选数量 -->
           <van-badge 
             v-if="getCategoryCount(cat.id) > 0" 
             :content="getCategoryCount(cat.id)" 
@@ -299,6 +297,7 @@ const scrollToCategory = (catId: number) => {
   activeCategoryId.value = catId;
   const element = document.getElementById(`cat-${catId}`);
   if (element && productListRef.value) {
+    console.log("sdsd", activeCategoryId.value, element)
     productListRef.value.scrollTo({
       top: element.offsetTop,
       behavior: 'smooth'
@@ -311,7 +310,7 @@ const handleScroll = () => {
   if (!productListRef.value) return;
   
   const scrollTop = productListRef.value.scrollTop;
-  const threshold = 100; // 容错阈值
+  const threshold = 100;
 
   for (let i = menuData.length - 1; i >= 0; i--) {
     const cat = menuData[i];
@@ -454,7 +453,7 @@ onMounted(() => {
         transform: translateY(-50%);
         height: 60%;
         width: 4px;
-        background: #ffcd00; /* 外卖黄 */
+        background: var(--van-primary-color);
         border-radius: 0 4px 4px 0;
       }
     }

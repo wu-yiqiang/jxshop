@@ -125,10 +125,9 @@ const orderTypes = reactive<OrderType[]>([
   { name: '售后/退款', type: 'after', icon: 'replay', bgColor: '#a0d911', count: 0 },
 ]);
 
-// 工具列表
 const toolList = reactive<ToolItem[]>([
   { name: '收货地址', icon: 'location-o', color: '#ee0a24', path: '/address' },
-  { name: '设置', icon: 'setting-o', color: '#969799', path: '/settings', badge: 1 },
+  // { name: '设置', icon: 'setting-o', color: '#969799', path: '/settings', badge: 1 },
 ]);
 
 const handleExitLogin = () => {
@@ -144,7 +143,7 @@ const navigateToOrder = (type: string) => {
 };
 
 const handleAssetClick = (type: string) => {
-  showToast(`查看${type}详情`);
+  // showToast(`查看${type}详情`);
 };
 
 const formatNumber = (num: number) => {
