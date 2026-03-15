@@ -194,7 +194,7 @@ const isCartOpen = ref(false);
 const showNotice = ref(false);
 
 // 购物车数据：{ [productId]: count }
-const cartMap = reactive<Record<number, number>>({});
+const cartMap = reactive<Record<any, number>>({});
 
 // --- 核心计算逻辑 ---
 const lastCategoryId = computed(() => {
@@ -275,7 +275,7 @@ const scrollToCategory = (catId: number) => {
 const handleScroll = () => {
   if (!productListRef.value) return;
   nextTick(() => {
-    const scrollTop = productListRef.value.scrollTop;
+    const scrollTop = productListRef.value?.scrollTop ?? 0;
     const threshold = 220;
     for (let i = menuData.length - 1; i >= 0; i--) {
       const cat = menuData[i];
