@@ -1,16 +1,12 @@
 <template>
   <div class="takeout-page">
-    
-    <!-- 1. 顶部门店信息区 (固定高度，可滚动背景) -->
-    <div class="shop-header" :style="{ backgroundImage: `url(${shopInfo.banner})` }">
+      <div class="shop-header" :style="{ backgroundImage: `url(${shopInfo.banner})` }">
       <div class="header-overlay"></div>
       <div class="header-content">
         <div class="shop-info-row">
           <h1 class="shop-name">{{ shopInfo.name }}</h1>
-          <van-tag type="primary" size="small" round>{{ shopInfo.rating }}分</van-tag>
-          <van-tag type="success" size="small" round>{{ shopInfo.monthSales }}月售</van-tag>
         </div>
-        <div class="shop-meta-row">
+        <!-- <div class="shop-meta-row">
           <span class="meta-item">🚚 {{ shopInfo.deliveryFee }}元配送费</span>
           <span class="meta-item">⏱️ {{ shopInfo.deliveryTime }}分钟</span>
           <span class="meta-item">💰 ¥{{ shopInfo.minPrice }}起送</span>
@@ -19,7 +15,7 @@
           <van-icon name="bullhorn-o" />
           <span class="notice-text">{{ shopInfo.notice }}</span>
           <van-icon name="arrow" />
-        </div>
+        </div> -->
       </div>
       <!-- 返回按钮 -->
       <div class="back-btn" @click="$router.back()">
@@ -29,7 +25,6 @@
 
     <!-- 2. 主体内容：左右双栏联动 -->
     <div class="main-container">
-      
       <!-- 左侧：分类导航 -->
       <div class="category-sidebar">
         <div 
@@ -50,13 +45,13 @@
 
       <!-- 右侧：商品列表 -->
       <div class="product-list-wrapper" ref="productListRef" @scroll="handleScroll">
-        <div 
+        <div
           v-for="cat in menuData" 
           :key="cat.id" 
           :id="'cat-' + cat.id"
           class="category-section"
         >
-          <div class="section-title">{{ cat.name }}</div>
+          <div class="section-title">{{ cat?.name }}</div>
           
           <div 
             v-for="product in cat.products" 
@@ -65,7 +60,6 @@
           >
             <div class="prod-left">
               <van-image :src="product.image" width="75px" height="75px" fit="cover" class="prod-img" />
-              <van-tag type="danger" size="mini" class="promo-tag" v-if="product.tags">{{ product.tags[0] }}</van-tag>
             </div>
             <div class="prod-right">
               <div class="prod-name">{{ product.name }}</div>
@@ -173,8 +167,6 @@
 <script setup lang="ts">
 import { ref, reactive, computed, nextTick, onMounted } from 'vue';
 import { showToast, showNotify } from 'vant';
-
-// --- 静态数据模拟 ---
 
 const shopInfo = {
   id: 1,
