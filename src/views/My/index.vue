@@ -4,13 +4,7 @@
     <div class="user-card">
       <div class="card-content">
         <div class="user-info">
-          <van-image
-            round
-            width="70px"
-            height="70px"
-            :src="userInfo.avatar || defaultAvatar"
-            class="avatar"
-          />
+          <van-image round width="70px" height="70px" :src="userInfo.avatar || defaultAvatar" class="avatar" />
           <div class="info-text">
             <h2 class="nickname">{{ userInfo.nickname || '点击登录' }}</h2>
             <!-- <div class="tags" v-if="userInfo.level">
@@ -19,15 +13,10 @@
             </div> -->
           </div>
         </div>
-        
+
         <!-- 资产数据行 -->
         <div class="assets-row">
-          <div 
-            class="asset-item" 
-            v-for="(item, index) in assetsList" 
-            :key="index" 
-            @click="handleAssetClick(item.type)"
-          >
+          <div class="asset-item" v-for="(item, index) in assetsList" :key="index" @click="handleAssetClick(item.type)">
             <div class="num">{{ formatNumber(item.value) }}</div>
             <div class="label">{{ item.label }}</div>
           </div>
@@ -57,15 +46,8 @@
 
     <!-- 3. 常用工具列表 -->
     <van-cell-group inset class="section-card">
-      <van-cell
-        v-for="tool in toolList"
-        :key="tool.name"
-        :title="tool.name"
-        is-link
-        :to="tool.path"
-        @click="tool.action ? tool.action() : null"
-        class="custom-cell"
-      >
+      <van-cell v-for="tool in toolList" :key="tool.name" :title="tool.name" is-link :to="tool.path"
+        @click="tool.action ? tool.action() : null" class="custom-cell">
         <template #icon>
           <div class="tool-icon-wrapper" :style="{ color: tool.color }">
             <van-icon :name="tool.icon" size="20" />
@@ -74,7 +56,7 @@
       </van-cell>
     </van-cell-group>
     <div class="bottom-container">
-            <van-button type="primary" block @click="handleExitLogin">退出登录</van-button>
+      <van-button type="primary" block @click="handleExitLogin">退出登录</van-button>
 
     </div>
     <div class="safe-area-bottom"></div>
@@ -150,7 +132,7 @@ const toolList = reactive<ToolItem[]>([
 ]);
 
 const handleExitLogin = () => {
-  router.push({ name: 'Login'});
+  router.push({ name: 'Login' });
 }
 
 const navigateToOrder = (type: string) => {
@@ -192,7 +174,7 @@ $card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   background: linear-gradient(135deg, #1989fa 0%, #4fc3f7 100%);
   padding: 30px 16px 20px;
   margin-bottom: 12px;
-  
+
   .card-content {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
@@ -213,7 +195,7 @@ $card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
     .info-text {
       flex: 1;
-      
+
       .nickname {
         font-size: 18px;
         font-weight: bold;
@@ -244,7 +226,7 @@ $card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       text-align: center;
       flex: 1;
       cursor: pointer;
-      
+
       .num {
         font-size: 18px;
         font-weight: 600;
@@ -265,9 +247,9 @@ $card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   border-radius: $card-radius;
   box-shadow: $card-shadow;
   overflow: hidden;
-  
+
   // 覆盖 Vant 默认边框
-  :deep(.van-card__header), 
+  :deep(.van-card__header),
   :deep(.van-cell-group) {
     background-color: #fff;
   }
@@ -295,7 +277,7 @@ $card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       justify-content: center;
       margin-bottom: 8px;
       transition: transform 0.2s;
-      
+
       &:active {
         transform: scale(0.95);
       }
@@ -310,6 +292,7 @@ $card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       position: absolute;
       top: -5px;
       right: 10px;
+
       :deep(.van-badge__content) {
         font-size: 10px;
         padding: 2px 5px;
@@ -317,9 +300,11 @@ $card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
   }
 }
+
 .bottom-container {
   padding: 20px 16px;
 }
+
 .card-footer {
   text-align: center;
   padding: 12px 0;
@@ -327,7 +312,7 @@ $card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   color: $text-sub;
   border-top: 1px solid #f5f5f5;
   cursor: pointer;
-  
+
   &:active {
     background-color: #f9f9f9;
   }
@@ -345,7 +330,7 @@ $card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
   }
-  
+
   .cell-badge {
     margin-right: 4px;
   }

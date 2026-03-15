@@ -17,6 +17,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: 'shop',
+        name: 'Shop',
+        component: () => import('@/views/shop/index.vue'),
+        meta: {
+          title: '购买'
+        }
+      },
+      {
         path: 'tools',
         name: 'Tools',
         component: () => import('@/views/tools/index.vue'),
