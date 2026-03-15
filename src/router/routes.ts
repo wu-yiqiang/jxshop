@@ -11,7 +11,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'home',
         name: 'Home',
-        component: () => import('@/views/demo/index.vue'),
+        component: () => import('@/views/Home/index.vue'),
         meta: {
           title: '主页'
         }
@@ -27,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'my',
         name: 'My',
-        component: () => import('@/views/about/index.vue'),
+        component: () => import('@/views/My/index.vue'),
         meta: {
           title: '我的',
           noCache: true
