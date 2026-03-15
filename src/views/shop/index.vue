@@ -1,11 +1,11 @@
 <template>
   <div class="topbar">
-          <div class="back-btn" @click="$router.back()">
-        <van-icon name="arrow-left" color="#fff" size="20" />
-      </div>
+    <div class="back-btn" @click="$router.back()">
+      <van-icon name="arrow-left" color="#fff" size="20" />
+    </div>
   </div>
   <div class="takeout-page">
-      <div class="shop-header" :style="{ backgroundImage: `url(${shopInfo.banner})` }">
+    <div class="shop-header" :style="{ backgroundImage: `url(${shopInfo.banner})` }">
       <div class="header-overlay"></div>
       <div class="header-content">
         <div class="shop-info-row">
@@ -27,36 +27,23 @@
     <!-- 2. 主体内容：左右双栏联动 -->
     <div class="main-container">
       <div class="category-sidebar">
-        <div 
-          v-for="(cat, index) in menuData" 
-          :key="cat.id"
-          :class="['sidebar-item', { active: activeCategoryId === cat.id }]"
-          @click="scrollToCategory(cat.id)"
-        >
+        <div v-for="(cat, index) in menuData" :key="cat.id"
+          :class="['sidebar-item', { active: activeCategoryId === cat.id }]" @click="scrollToCategory(cat.id)">
           <div class="item-name">{{ cat.name }}</div>
-          <van-badge 
+          <!-- <van-badge 
             v-if="getCategoryCount(cat.id) > 0" 
             :content="getCategoryCount(cat.id)" 
             class="sidebar-badge" 
-          />
+          /> -->
         </div>
       </div>
 
       <!-- 右侧：商品列表 -->
       <div class="product-list-wrapper" ref="productListRef" @scroll="handleScroll">
-        <div
-          v-for="cat in menuData" 
-          :key="cat.id" 
-          :id="'cat-' + cat.id"
-          class="category-section"
-        >
+        <div v-for="cat in menuData" :key="cat.id" :id="'cat-' + cat.id" class="category-section">
           <div class="section-title">{{ cat?.name }}</div>
-          
-          <div 
-            v-for="product in cat.products" 
-            :key="product.id" 
-            class="product-card"
-          >
+
+          <div v-for="product in cat.products" :key="product.id" class="product-card">
             <div class="prod-left">
               <van-image :src="product.image" width="75px" height="75px" fit="cover" class="prod-img" />
             </div>
@@ -70,18 +57,10 @@
                   <span class="value">{{ product.price }}</span>
                   <span class="origin-price" v-if="product.originalPrice">¥{{ product.originalPrice }}</span>
                 </div>
-                
+
                 <!-- 加减控件 -->
-                <van-stepper
-                  v-model="cartMap[product.id]"
-                  min="0"
-                  integer
-                  button-size="22"
-                  input-width="24"
-                  theme="round"
-                  @change="updateCart(product, $event)"
-                  class="custom-stepper"
-                />
+                <van-stepper v-model="cartMap[product.id]" min="0" integer button-size="22" input-width="24"
+                  theme="round" @change="updateCart(product, $event)" class="custom-stepper" />
               </div>
             </div>
           </div>
@@ -93,13 +72,8 @@
 
     <!-- 3. 底部购物车栏 -->
     <div class="cart-bar-wrapper">
-      <van-submit-bar
-        :price="totalPrice * 100"
-        button-text="去结算"
-        button-type="primary"
-        @submit="onSubmit"
-        class="custom-submit-bar"
-      >
+      <van-submit-bar :price="totalPrice * 100" button-text="去结算" button-type="primary" @submit="onSubmit"
+        class="custom-submit-bar">
         <template #icon>
           <div class="cart-icon-container" @click="toggleCartPopup">
             <van-badge :content="totalCount" :max="99" class="cart-badge">
@@ -132,13 +106,8 @@
               <div class="item-name">{{ item.name }}</div>
               <div class="item-price">¥{{ (item.price * item.count).toFixed(2) }}</div>
             </div>
-            <van-stepper
-              v-model="cartMap[item.id]"
-              min="0"
-              integer
-              button-size="18"
-              @change="updateCart(item, $event)"
-            />
+            <van-stepper v-model="cartMap[item.id]" min="0" integer button-size="18"
+              @change="updateCart(item, $event)" />
           </div>
         </div>
         <!-- 优惠券占位 -->
@@ -228,7 +197,9 @@ const showNotice = ref(false);
 const cartMap = reactive<Record<number, number>>({});
 
 // --- 核心计算逻辑 ---
-
+const lastCategoryId = computed(() => {
+  return menuData[menuData.length - 1]?.id
+})
 // 获取购物车中完整的商品列表
 const cartItemList = computed(() => {
   const list: any[] = [];
@@ -270,11 +241,6 @@ const updateCart = (product: any, newValue: number | boolean) => {
   } else {
     delete cartMap[product.id];
   }
-  
-  // 如果购物车有东西且用户没打开弹窗，可以轻微震动反馈
-  if (totalCount.value > 0 && !isCartOpen.value && navigator.vibrate) {
-    // navigator.vibrate(50); 
-  }
 };
 
 // 清空购物车
@@ -298,9 +264,8 @@ const scrollToCategory = (catId: number) => {
   activeCategoryId.value = catId;
   const element = document.getElementById(`cat-${catId}`);
   if (element && productListRef.value) {
-    console.log("sdsd", activeCategoryId.value, element)
     productListRef.value.scrollTo({
-      top: element.offsetTop,
+      top: element.offsetTop - 200,
       behavior: 'smooth'
     });
   }
@@ -309,23 +274,28 @@ const scrollToCategory = (catId: number) => {
 // 右侧滚动监听 (自动高亮左侧)
 const handleScroll = () => {
   if (!productListRef.value) return;
-  
-  const scrollTop = productListRef.value.scrollTop;
-  const threshold = 100;
+  nextTick(() => {
+    const scrollTop = productListRef.value.scrollTop;
+    const threshold = 220;
+    for (let i = menuData.length - 1; i >= 0; i--) {
+      const cat = menuData[i];
+      const element = document.getElementById(`cat-${cat.id}`);
+      if (element) {
+        const offsetTop = element.offsetTop;
+        if (scrollTop + threshold >= offsetTop) {
+          if (activeCategoryId.value !== cat.id) {
+            console.log("casda", activeCategoryId.value, cat.id)
+            if (activeCategoryId.value !== lastCategoryId.value) {
+              activeCategoryId.value = cat.id;
 
-  for (let i = menuData.length - 1; i >= 0; i--) {
-    const cat = menuData[i];
-    const element = document.getElementById(`cat-${cat.id}`);
-    if (element) {
-      const offsetTop = element.offsetTop;
-      if (scrollTop + threshold >= offsetTop) {
-        if (activeCategoryId.value !== cat.id) {
-          activeCategoryId.value = cat.id;
+            }
+          }
+
+          break;
         }
-        break;
       }
     }
-  }
+  })
 };
 
 // 结算
@@ -338,13 +308,13 @@ const onSubmit = () => {
     });
     return;
   }
-  
+
   showNotify({
     type: 'success',
     message: `下单成功！共 ${totalCount.value} 件，合计 ¥${totalPrice.value.toFixed(2)}`,
     duration: 2000
   });
-  
+
   // 模拟跳转
   setTimeout(() => {
     clearCart();
@@ -360,6 +330,7 @@ onMounted(() => {
 .topbar {
   padding: 10px 12px;
 }
+
 .takeout-page {
   height: 100vh;
   display: flex;
@@ -377,46 +348,67 @@ onMounted(() => {
   background-position: center;
   color: #fff;
   flex-shrink: 0;
+
   .header-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
   }
+
   .header-content {
     position: relative;
     z-index: 1;
     padding: 40px 16px 12px;
+
     .shop-info-row {
       display: flex;
       align-items: center;
       gap: 8px;
       margin-bottom: 8px;
-      .shop-name { font-size: 20px; font-weight: bold; margin: 0; }
+
+      .shop-name {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0;
+      }
     }
+
     .shop-meta-row {
       font-size: 12px;
       opacity: 0.9;
       margin-bottom: 8px;
-      .meta-item { margin-right: 12px; }
+
+      .meta-item {
+        margin-right: 12px;
+      }
     }
+
     .shop-notice {
       display: flex;
       align-items: center;
       font-size: 12px;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       padding: 4px 8px;
       border-radius: 12px;
       width: fit-content;
-      .notice-text { margin: 0 6px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+      .notice-text {
+        margin: 0 6px;
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
   }
+
   .back-btn {
     position: absolute;
     top: 35px;
     left: 16px;
     z-index: 2;
     padding: 8px;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 50%;
   }
 }
@@ -434,8 +426,14 @@ onMounted(() => {
   background: #f8f8f8;
   overflow-y: auto;
   flex-shrink: 0;
-  scrollbar-width: none; /* Firefox */
-  &::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+  scrollbar-width: none;
+
+  /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Chrome/Safari */
 
   .sidebar-item {
     padding: 16px 8px;
@@ -445,15 +443,17 @@ onMounted(() => {
     position: relative;
     cursor: pointer;
     transition: background 0.2s;
-    
+
     &.active {
       background: #fff;
       color: #333;
       font-weight: bold;
+
       &::before {
         content: '';
         position: absolute;
-        left: 0; top: 50%;
+        left: 0;
+        top: 50%;
         transform: translateY(-50%);
         height: 60%;
         width: 4px;
@@ -461,11 +461,13 @@ onMounted(() => {
         border-radius: 0 4px 4px 0;
       }
     }
-    
+
     .sidebar-badge {
       position: absolute;
-      top: 6px; right: 6px;
+      top: 6px;
+      right: 6px;
       transform: scale(0.85);
+
       :deep(.van-badge__content) {
         background: #ff4d4f;
         font-size: 9px;
@@ -483,7 +485,7 @@ onMounted(() => {
   background: #fff;
   padding: 0 12px;
   scroll-behavior: smooth;
-  
+
   .category-section {
     .section-title {
       font-size: 14px;
@@ -495,37 +497,44 @@ onMounted(() => {
       background: #fff;
       z-index: 10;
     }
-    
+
     .product-card {
       display: flex;
       margin-bottom: 16px;
       padding-bottom: 16px;
       border-bottom: 1px solid #f5f5f5;
-      
+
       .prod-left {
         position: relative;
         margin-right: 12px;
         flex-shrink: 0;
-        .prod-img { border-radius: 6px; background: #f9f9f9; }
+
+        .prod-img {
+          border-radius: 6px;
+          background: #f9f9f9;
+        }
+
         .promo-tag {
           position: absolute;
-          top: -4px; left: -4px;
+          top: -4px;
+          left: -4px;
           transform: scale(0.8);
         }
       }
-      
+
       .prod-right {
         flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        
+
         .prod-name {
           font-size: 15px;
           font-weight: 500;
           color: #333;
           margin-bottom: 4px;
         }
+
         .prod-desc {
           font-size: 11px;
           color: #999;
@@ -540,17 +549,24 @@ onMounted(() => {
           color: #ccc;
           margin-bottom: 6px;
         }
-        
+
         .prod-bottom {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          
+
           .prod-price {
             color: #ff4d4f;
             font-weight: bold;
-            .symbol { font-size: 12px; }
-            .value { font-size: 18px; }
+
+            .symbol {
+              font-size: 12px;
+            }
+
+            .value {
+              font-size: 18px;
+            }
+
             .origin-price {
               font-size: 11px;
               color: #999;
@@ -559,20 +575,25 @@ onMounted(() => {
               font-weight: normal;
             }
           }
-          
           .custom-stepper {
-            :deep(.van-stepper__minus), :deep(.van-stepper__plus) {
-              width: 22px; height: 22px;
+            :deep(.van-stepper__minus),
+            :deep(.van-stepper__plus) {
+              width: 22px;
+              height: 22px;
               background-color: #fff;
               border-color: #ffcd00;
               color: #ffcd00;
             }
+
             :deep(.van-stepper__input) {
-              width: 24px; height: 22px;
+              width: 24px;
+              height: 22px;
               font-size: 12px;
               color: #333;
             }
-            :deep(.van-stepper__minus--disabled), :deep(.van-stepper__plus--disabled) {
+
+            :deep(.van-stepper__minus--disabled),
+            :deep(.van-stepper__plus--disabled) {
               border-color: #eee;
               color: #eee;
               background: #fff;
@@ -588,20 +609,21 @@ onMounted(() => {
 .cart-bar-wrapper {
   flex-shrink: 0;
   z-index: 100;
-  
+
   .custom-submit-bar {
     background: #fff;
+
     :deep(.van-submit-bar__text) {
       flex: 1;
       text-align: left;
       padding-left: 0;
       margin-left: 8px;
     }
-    
+
     .cart-icon-container {
       position: relative;
       margin-right: 8px;
-      
+
       .cart-icon-bg {
         width: 46px;
         height: 46px;
@@ -610,14 +632,15 @@ onMounted(() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         border: 2px solid #444;
       }
-      
+
       .cart-badge {
         position: absolute;
         top: -5px;
         right: -5px;
+
         :deep(.van-badge__content) {
           background: #ff4d4f;
           border: 1px solid #fff;
@@ -626,7 +649,7 @@ onMounted(() => {
           height: 16px;
         }
       }
-      
+
       .delivery-tip {
         position: absolute;
         top: -24px;
@@ -638,6 +661,7 @@ onMounted(() => {
         padding: 2px 8px;
         border-radius: 10px;
         white-space: nowrap;
+
         &::after {
           content: '';
           position: absolute;
@@ -650,12 +674,12 @@ onMounted(() => {
         }
       }
     }
-    
+
     .selected-text {
       font-size: 12px;
       color: #666;
     }
-    
+
     :deep(.van-submit-bar__button) {
       font-weight: normal;
     }
@@ -668,35 +692,58 @@ onMounted(() => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  
+
   .popup-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 16px;
-    .title { font-size: 16px; font-weight: bold; color: #333; }
-    .clear-btn { font-size: 13px; color: #999; }
+
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .clear-btn {
+      font-size: 13px;
+      color: #999;
+    }
   }
-  
+
   .popup-list {
     flex: 1;
     overflow-y: auto;
+
     .popup-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 0;
       border-bottom: 1px solid #f5f5f5;
-      .item-info { flex: 1; }
-      .item-name { font-size: 14px; color: #333; margin-bottom: 4px; }
-      .item-price { font-size: 13px; color: #ff4d4f; }
+
+      .item-info {
+        flex: 1;
+      }
+
+      .item-name {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 4px;
+      }
+
+      .item-price {
+        font-size: 13px;
+        color: #ff4d4f;
+      }
     }
   }
-  
+
   .coupon-area {
     margin-top: 16px;
     border-top: 1px dashed #eee;
     padding-top: 12px;
+
     .coupon-item {
       display: flex;
       justify-content: space-between;
