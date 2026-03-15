@@ -14,7 +14,7 @@ const { theme } = storeToRefs(darkModeStore)
 <template>
   <div class="app-wrapper">
     <van-config-provider :theme="theme">
-      <NavBar />
+      <!-- <NavBar /> -->
       <router-view v-slot="{ Component }">
         <keep-alive :include="cachedViewList">
           <component :is="Component" />

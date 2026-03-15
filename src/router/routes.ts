@@ -9,31 +9,31 @@ const routes: Array<RouteRecordRaw> = [
     redirect: { name: 'Demo' },
     children: [
       {
-        path: 'demo',
-        name: 'Demo',
+        path: 'home',
+        name: 'Home',
         component: () => import('@/views/demo/index.vue'),
         meta: {
-          title: '主页',
-        },
+          title: '主页'
+        }
       },
       {
         path: 'tools',
         name: 'Tools',
         component: () => import('@/views/tools/index.vue'),
         meta: {
-          title: '工具',
-        },
+          title: '工具'
+        }
       },
       {
-        path: 'about',
-        name: 'About',
+        path: 'my',
+        name: 'My',
         component: () => import('@/views/about/index.vue'),
         meta: {
-          title: '关于',
-          noCache: true,
-        },
-      },
-    ],
+          title: '我的',
+          noCache: true
+        }
+      }
+    ]
   },
   // 404 页面
   {
@@ -42,9 +42,18 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/404.vue'),
     meta: {
       title: '页面未找到',
-      noCache: true,
-    },
+      noCache: true
+    }
   },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/Login.vue'),
+    meta: {
+      title: '登录',
+      noCache: true
+    }
+  }
 ]
 
 export default routes

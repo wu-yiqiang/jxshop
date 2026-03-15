@@ -1,14 +1,14 @@
 import {
   createRouter,
-  createWebHashHistory,
+  createWebHistory
 } from 'vue-router'
 import { useCachedViewStore } from '@/store/modules/cached-view'
 import setPageTitle from '@/utils/set-page-title'
 import routes from './routes'
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes,
+  history: createWebHistory('jxshop'),
+  routes
 })
 
 router.beforeEach((to, _from, next) => {
