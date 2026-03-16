@@ -25,14 +25,6 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: 'tools',
-        name: 'Tools',
-        component: () => import('@/views/tools/index.vue'),
-        meta: {
-          title: '工具'
-        }
-      },
-      {
         path: 'my',
         name: 'My',
         component: () => import('@/views/My/index.vue'),

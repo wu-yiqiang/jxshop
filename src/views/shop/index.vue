@@ -2,7 +2,10 @@
   <div class="topbar">
     <div class="back-btn" @click="$router.back()">
       <van-icon name="arrow-left" color="#fff" size="20" />
+      
     </div>
+    <div class="tilte">门店</div>
+      <div></div>
   </div>
   <div class="takeout-page">
     <div class="shop-header" :style="{ backgroundImage: `url(${shopInfo.banner})` }">
@@ -329,6 +332,9 @@ onMounted(() => {
 <style lang="scss" scoped>
 .topbar {
   padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .takeout-page {
@@ -410,6 +416,7 @@ onMounted(() => {
     padding: 8px;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 50%;
+   
   }
 }
 
